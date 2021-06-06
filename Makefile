@@ -20,7 +20,7 @@
 #//  CPU: ALL                                                //
 #//                                                          //
 #//////////////////////////////////////////////////////////////
-BASE_IMAGE := alpine:latest
+BASE_IMAGE := ubuntu:latest
 IMAGE_NAME := bensuperpc/shivyc
 DOCKERFILE := Dockerfile
 

@@ -1,7 +1,15 @@
-ARG DOCKER_IMAGE=alpine:latest
+ARG DOCKER_IMAGE=ubuntu:latest
 FROM $DOCKER_IMAGE
 
-RUN apk add --no-cache python3 py3-setuptools make binutils git \
+RUN apt-get update && apt-get -y install \
+	make \
+    python3 \
+    python3-pip \
+    gcc \
+	git \
+#	--no-install-recommends \
+	&& apt-get -y autoremove --purge \
+	&& rm -rf /var/lib/apt/lists/* \
 	&& git clone --recurse-submodules https://github.com/ShivamSarodia/ShivyC.git \
 	&& cd ShivyC && python3 setup.py install && python3 -m unittest discover
 
