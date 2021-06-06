@@ -1,4 +1,4 @@
-ARG DOCKER_IMAGE=ubuntu:latest
+ARG DOCKER_IMAGE=debian:bullseye-slim
 FROM $DOCKER_IMAGE
 
 RUN apt-get update && apt-get -y install \
