@@ -3,7 +3,7 @@ FROM $DOCKER_IMAGE
 
 RUN apk add --no-cache python3 py3-setuptools make binutils git \
 	&& git clone --recurse-submodules https://github.com/ShivamSarodia/ShivyC.git \
-	&& cd ShivyC && python3 setup.py install && python3 -m unittest discover
+	&& cd ShivyC && python3 setup.py install
 
 LABEL author="Bensuperpc <bensuperpc@gmail.com>"
 LABEL mantainer="Bensuperpc <bensuperpc@gmail.com>"

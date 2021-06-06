@@ -20,7 +20,7 @@
 #//  CPU: ALL                                                //
 #//                                                          //
 #//////////////////////////////////////////////////////////////
-BASE_IMAGE := debian:bullseye-slim
+BASE_IMAGE := alpine:latest
 IMAGE_NAME := bensuperpc/shivyc
 DOCKERFILE := Dockerfile
 
