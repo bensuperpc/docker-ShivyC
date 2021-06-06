@@ -1,17 +1,9 @@
 ARG DOCKER_IMAGE=alpine:latest
-FROM $DOCKER_IMAGE AS builder
+FROM $DOCKER_IMAGE
 
-RUN apk add --no-cache gcc make musl-dev git \
-	&& git clone --recurse-submodules <<GIT>>
-WORKDIR /<<IMAGE_NAME>>
-#--CPU=x86_64
-RUN ./configure --config-musl \
-	&& make -j$(nproc) \
-	&& make test -j$(nproc) \
-	&& make install
-
-ARG DOCKER_IMAGE=alpine:latest
-FROM $DOCKER_IMAGE AS runtime
+RUN apk add --no-cache python3 py3-setuptools make binutils git \
+	&& git clone --recurse-submodules https://github.com/ShivamSarodia/ShivyC.git \
+	&& cd ShivyC && python3 setup.py install && python3 -m unittest discover
 
 LABEL author="Bensuperpc <bensuperpc@gmail.com>"
 LABEL mantainer="Bensuperpc <bensuperpc@gmail.com>"
@@ -19,24 +11,20 @@ LABEL mantainer="Bensuperpc <bensuperpc@gmail.com>"
 ARG VERSION="1.0.0"
 ENV VERSION=$VERSION
 
-RUN apk add --no-cache musl-dev make
+#RUN shivyc -h
 
-COPY --from=builder /usr/local /usr/local
-
-ENV PATH="/usr/local/bin:${PATH}"
-
-ENV CC=/usr/local/bin/tcc
+ENV CC=/usr/bin/shivyc
 WORKDIR /usr/src/myapp
 
-CMD ["", "-h"]
+CMD ["shivyc", "-h"]
 
 LABEL org.label-schema.schema-version="1.0" \
 	  org.label-schema.build-date=$BUILD_DATE \
-	  org.label-schema.name="bensuperpc/docker-<<IMAGE_NAME>>" \
-	  org.label-schema.description="build <<IMAGE_NAME>> compiler" \
+	  org.label-schema.name="bensuperpc/docker-shivyc" \
+	  org.label-schema.description="build shivyc compiler" \
 	  org.label-schema.version=$VERSION \
 	  org.label-schema.vendor="Bensuperpc" \
 	  org.label-schema.url="http://bensuperpc.com/" \
-	  org.label-schema.vcs-url="https://github.com/Bensuperpc/docker-<<IMAGE_NAME>>" \
+	  org.label-schema.vcs-url="https://github.com/Bensuperpc/docker-shivyc" \
 	  org.label-schema.vcs-ref=$VCS_REF \
-	  org.label-schema.docker.cmd="docker build -t bensuperpc/docker-<<IMAGE_NAME>> -f Dockerfile ."
+	  org.label-schema.docker.cmd="docker build -t bensuperpc/docker-shivyc -f Dockerfile ."

@@ -8,11 +8,11 @@
 #//////////////////////////////////////////////////////////////
 #//                                                          //
 #//  Script, 2021                                            //
-#//  Created: 04, June, 2021                                 //
-#//  Modified: 04, June, 2021                                //
+#//  Created: 06, June, 2021                                 //
+#//  Modified: 06, June, 2021                                //
 #//  file: -                                                 //
 #//  -                                                       //
-#//  Source:                                                 //
+#//  Source: git@github.com:ShivamSarodia/ShivyC.git                                                //
 #//          https://www.docker.com/blog/getting-started-with-docker-for-arm-on-linux/
 #//          https://schinckel.net/2021/02/12/docker-%2B-makefile/
 #//          https://www.padok.fr/en/blog/multi-architectures-docker-iot
@@ -20,8 +20,8 @@
 #//  CPU: ALL                                                //
 #//                                                          //
 #//////////////////////////////////////////////////////////////
-BASE_IMAGE := alpine:latest
-IMAGE_NAME := bensuperpc/<<IMAGE_NAME>>
+BASE_IMAGE := debian:bullseye-slim
+IMAGE_NAME := bensuperpc/shivyc
 DOCKERFILE := Dockerfile
 
 DOCKER := docker
@@ -51,8 +51,8 @@ push: all
 # https://github.com/linuxkit/linuxkit/tree/master/pkg/binfmt
 qemu:
 	export DOCKER_CLI_EXPERIMENTAL=enabled
-	$(DOCKER) run --rm --privileged linuxkit/binfmt:v0.8
-	$(DOCKER) buildx create --name mybuilder --driver docker-container --use
+	$(DOCKER) run --rm --privileged multiarch/qemu-user-static --reset -p yes
+	$(DOCKER) buildx create --name qemu_builder --driver docker-container --use
 	$(DOCKER) buildx inspect --bootstrap
 
 clean:
